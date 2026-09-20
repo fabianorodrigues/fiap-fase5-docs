@@ -26,32 +26,40 @@ e baixe um `resultado.zip` com frames PNG extraídos pelo FFmpeg.
 O FIAP X não possui front-end próprio. A jornada é executada por Postman ou cURL: o usuário autentica no Keycloak, chama a API de gestão, envia o arquivo diretamente ao MinIO por URL pré-assinada e acompanha o status até o processamento terminar.
 
 ```mermaid
+%%{init: {"flowchart": {"nodeSpacing": 34, "rankSpacing": 46}} }%%
 flowchart LR
-    USER([Cliente / Postman])
-    KC[Keycloak]
-    API[Video Management Service]
-    PG[(PostgreSQL)]
-    REDIS[(Redis)]
-    MINIO[(MinIO bucket videos)]
-    MQ[RabbitMQ]
-    WORKER[Video Processing Service]
-    FFMPEG[FFmpeg]
-    MAIL[Mailpit]
+    classDef client fill:#EFEFEF,color:#222,stroke:#999
+    classDef api fill:#512BD4,color:#fff,stroke:#39208A
+    classDef worker fill:#1F7A5A,color:#fff,stroke:#0F4A35
+    classDef broker fill:#FF6600,color:#fff,stroke:#B34700
+    classDef store fill:#2563EB,color:#fff,stroke:#1E3A8A
+    classDef auth fill:#6D28D9,color:#fff,stroke:#4C1D95
+    classDef mail fill:#3F3F46,color:#fff,stroke:#18181B
+
+    USER([Cliente ou Postman]):::client
+    KC["Keycloak<br/>realm fiapx"]:::auth
+    API["Video Management<br/>API HTTP"]:::api
+    PG[("PostgreSQL<br/>metadados")]:::store
+    REDIS[("Redis<br/>cache best-effort")]:::store
+    MINIO[("MinIO<br/>bucket videos")]:::store
+    MQ["RabbitMQ<br/>eventos e filas"]:::broker
+    WORKER["Video Processing<br/>Worker .NET"]:::worker
+    FFMPEG["FFmpeg<br/>frames PNG"]:::worker
+    MAIL["Mailpit<br/>e-mail local"]:::mail
 
     USER -->|login| KC
     KC -->|JWT| USER
-    USER -->|POST /videos| API
+    USER -->|JWT + /videos| API
     API --> PG
     API -. cache .-> REDIS
-    API -->|presigned upload/download| MINIO
-    USER -->|PUT original.mp4| MINIO
-    MINIO -->|ObjectCreated video.uploaded| MQ
-    MQ -->|video.processing| WORKER
+    API -- "presigned URL" --> MINIO
+    MINIO -- "ObjectCreated: original.mp4" --> MQ
+    MQ -- "video.uploaded" --> WORKER
     WORKER --> FFMPEG
-    WORKER -->|resultado.zip| MINIO
-    WORKER -->|started/completed/failed| MQ
-    MQ -->|video.status-updates| API
-    API -. falha .-> MAIL
+    WORKER -- "resultado.zip" --> MINIO
+    WORKER -- "started/completed/failed" --> MQ
+    MQ -- "status updates" --> API
+    API -. "falha de processamento" .-> MAIL
 ```
 
 ## Repositórios
@@ -115,6 +123,7 @@ Links:
 ## Estados do vídeo
 
 ```mermaid
+%%{init: {"theme": "base", "themeVariables": {"primaryColor": "#E8F1F8", "primaryBorderColor": "#3F6075", "primaryTextColor": "#1F2933", "secondaryColor": "#EEF4F2", "tertiaryColor": "#FFF8E1", "lineColor": "#627282"}} }%%
 stateDiagram-v2
     [*] --> RECEBIDO: POST /videos
     RECEBIDO --> PROCESSANDO: video.processing.started
@@ -122,6 +131,15 @@ stateDiagram-v2
     PROCESSANDO --> ERRO: video.processing.failed
     RECEBIDO --> CONCLUIDO: completed idempotente
     RECEBIDO --> ERRO: failed idempotente
+
+    classDef recebido fill:#E8F1F8,color:#1F2933,stroke:#3F6075
+    classDef ativo fill:#FFF8E1,color:#2F2500,stroke:#A06A00
+    classDef sucesso fill:#EEF4F2,color:#1F2933,stroke:#00897B
+    classDef erro fill:#3F3F46,color:#fff,stroke:#18181B
+    class RECEBIDO recebido
+    class PROCESSANDO ativo
+    class CONCLUIDO sucesso
+    class ERRO erro
 ```
 
 O PostgreSQL é a fonte de verdade dos estados. O Redis é usado como cache degradável para listagem e detalhe.

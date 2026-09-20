@@ -9,49 +9,57 @@ Não há front-end na implementação atual. A interação prevista é por Postm
 ## Arquitetura em alto nível
 
 ```mermaid
+%%{init: {"flowchart": {"nodeSpacing": 34, "rankSpacing": 46}} }%%
 flowchart LR
+    classDef client fill:#EFEFEF,color:#222,stroke:#999
+    classDef api fill:#512BD4,color:#fff,stroke:#39208A
+    classDef worker fill:#1F7A5A,color:#fff,stroke:#0F4A35
+    classDef broker fill:#FF6600,color:#fff,stroke:#B34700
+    classDef store fill:#2563EB,color:#fff,stroke:#1E3A8A
+    classDef auth fill:#6D28D9,color:#fff,stroke:#4C1D95
+    classDef mail fill:#3F3F46,color:#fff,stroke:#18181B
+
     subgraph Cliente
-      USER([Postman / cURL])
+      USER([Postman / cURL]):::client
     end
 
     subgraph Identidade
-      KC[Keycloak realm fiapx]
+      KC["Keycloak<br/>realm fiapx"]:::auth
     end
 
     subgraph Gestao["Gestão de vídeos"]
-      API[Video Management Service]
-      PG[(PostgreSQL)]
-      REDIS[(Redis)]
-      MAIL[Mailpit]
+      API["Video Management<br/>API HTTP"]:::api
+      PG[("PostgreSQL<br/>metadados")]:::store
+      REDIS[("Redis<br/>cache best-effort")]:::store
+      MAIL["Mailpit<br/>e-mail local"]:::mail
     end
 
     subgraph Storage["Armazenamento de objetos"]
-      MINIO[(MinIO bucket videos)]
+      MINIO[("MinIO<br/>bucket videos")]:::store
     end
 
     subgraph Mensageria
-      MQ[RabbitMQ]
+      MQ["RabbitMQ<br/>eventos e filas"]:::broker
     end
 
     subgraph Processamento
-      WORKER[Video Processing Service]
-      FFMPEG[FFmpeg]
+      WORKER["Video Processing<br/>Worker .NET"]:::worker
+      FFMPEG["FFmpeg<br/>frames PNG"]:::worker
     end
 
     USER -->|login| KC
     KC -->|JWT| USER
     USER -->|JWT + /videos| API
     API --> PG
-    API -. cache best-effort .-> REDIS
-    API -->|presigned URL| MINIO
-    USER -->|upload direto| MINIO
-    MINIO -->|ObjectCreated| MQ
-    MQ -->|video.processing| WORKER
-    WORKER --> MINIO
+    API -. cache .-> REDIS
+    API -- "presigned URL" --> MINIO
+    MINIO -- "ObjectCreated: original.mp4" --> MQ
+    MQ -- "video.uploaded" --> WORKER
     WORKER --> FFMPEG
-    WORKER -->|eventos de status| MQ
-    MQ -->|video.status-updates| API
-    API -. erro .-> MAIL
+    WORKER -- "resultado.zip" --> MINIO
+    WORKER -- "started/completed/failed" --> MQ
+    MQ -- "status updates" --> API
+    API -. "falha de processamento" .-> MAIL
 ```
 
 ## Responsabilidades principais

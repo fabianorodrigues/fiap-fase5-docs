@@ -3,16 +3,25 @@
 ## Mapa de comunicação
 
 ```mermaid
+%%{init: {"flowchart": {"nodeSpacing": 34, "rankSpacing": 46}} }%%
 flowchart LR
-    USER([Cliente])
-    KC[Keycloak]
-    API[Management API]
-    PG[(PostgreSQL)]
-    REDIS[(Redis)]
-    MINIO[(MinIO)]
-    MQ[(RabbitMQ)]
-    WORKER[Processing Worker]
-    MAIL[Mailpit]
+    classDef client fill:#EFEFEF,color:#222,stroke:#999
+    classDef api fill:#512BD4,color:#fff,stroke:#39208A
+    classDef worker fill:#1F7A5A,color:#fff,stroke:#0F4A35
+    classDef broker fill:#FF6600,color:#fff,stroke:#B34700
+    classDef store fill:#2563EB,color:#fff,stroke:#1E3A8A
+    classDef auth fill:#6D28D9,color:#fff,stroke:#4C1D95
+    classDef mail fill:#3F3F46,color:#fff,stroke:#18181B
+
+    USER([Cliente]):::client
+    KC["Keycloak<br/>OIDC"]:::auth
+    API["Management API<br/>HTTP"]:::api
+    PG[("PostgreSQL<br/>SQL")]:::store
+    REDIS[("Redis<br/>cache")]:::store
+    MINIO[("MinIO<br/>S3")]:::store
+    MQ["RabbitMQ<br/>AMQP"]:::broker
+    WORKER["Processing Worker<br/>.NET"]:::worker
+    MAIL["Mailpit<br/>SMTP"]:::mail
 
     USER -->|HTTP token password grant| KC
     USER -->|HTTP JWT| API

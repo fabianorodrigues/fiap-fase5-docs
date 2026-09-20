@@ -3,6 +3,7 @@
 ## Fluxo de upload
 
 ```mermaid
+%%{init: {"theme": "base", "themeVariables": {"actorBkg": "#EFEFEF", "actorBorder": "#999999", "actorTextColor": "#222222", "activationBkgColor": "#E8F1F8", "activationBorderColor": "#3F6075", "signalColor": "#627282", "signalTextColor": "#1F2933", "labelBoxBkgColor": "#EEF4F2", "labelBoxBorderColor": "#00897B", "labelTextColor": "#1F2933", "noteBkgColor": "#FFF8E1", "noteBorderColor": "#A06A00", "noteTextColor": "#2F2500"}, "sequence": {"diagramMarginX": 24, "diagramMarginY": 18, "actorMargin": 42, "messageMargin": 34}} }%%
 sequenceDiagram
     actor Usuario as Usuário
     participant KC as Keycloak
@@ -35,6 +36,7 @@ O Worker rejeita notificações MinIO que não sigam a chave canônica do vídeo
 ## Processamento assíncrono
 
 ```mermaid
+%%{init: {"theme": "base", "themeVariables": {"actorBkg": "#EFEFEF", "actorBorder": "#999999", "actorTextColor": "#222222", "activationBkgColor": "#E8F1F8", "activationBorderColor": "#3F6075", "signalColor": "#627282", "signalTextColor": "#1F2933", "labelBoxBkgColor": "#EEF4F2", "labelBoxBorderColor": "#00897B", "labelTextColor": "#1F2933", "noteBkgColor": "#FFF8E1", "noteBorderColor": "#A06A00", "noteTextColor": "#2F2500"}, "sequence": {"diagramMarginX": 24, "diagramMarginY": 18, "actorMargin": 42, "messageMargin": 34}} }%%
 sequenceDiagram
     participant MQ as RabbitMQ
     participant Worker as Processing Worker

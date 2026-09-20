@@ -3,16 +3,24 @@
 ## Estratégia geral
 
 ```mermaid
+%%{init: {"flowchart": {"nodeSpacing": 34, "rankSpacing": 46}} }%%
 flowchart LR
-    DEV[Desenvolvedor]
-    GH[GitHub]
-    CI[CI GitHub-hosted]
-    GHCR[GHCR]
-    CD[CD workflow_run]
-    GUARD[Guard anti-stale]
-    RUNNER[Self-hosted runner Windows]
-    INFRA[DEPLOY_INFRA_PATH]
-    COMPOSE[Docker Compose local]
+    classDef client fill:#EFEFEF,color:#222,stroke:#999
+    classDef api fill:#512BD4,color:#fff,stroke:#39208A
+    classDef worker fill:#1F7A5A,color:#fff,stroke:#0F4A35
+    classDef broker fill:#FF6600,color:#fff,stroke:#B34700
+    classDef store fill:#2563EB,color:#fff,stroke:#1E3A8A
+    classDef tool fill:#3F3F46,color:#fff,stroke:#18181B
+
+    DEV([Desenvolvedor]):::client
+    GH["GitHub<br/>repositórios"]:::store
+    CI["CI<br/>GitHub-hosted"]:::api
+    GHCR[("GHCR<br/>imagens SHA")]:::store
+    CD["CD<br/>workflow_run"]:::broker
+    GUARD["Guard<br/>anti-stale"]:::tool
+    RUNNER["Self-hosted runner<br/>Windows"]:::worker
+    INFRA["DEPLOY_INFRA_PATH"]:::tool
+    COMPOSE["Docker Compose<br/>local"]:::worker
 
     DEV -->|push / PR| GH
     GH --> CI

@@ -3,23 +3,31 @@
 ## Topologia
 
 ```mermaid
+%%{init: {"flowchart": {"nodeSpacing": 30, "rankSpacing": 44}} }%%
 flowchart LR
-    MINIO[MinIO ObjectCreated]
-    PX[video.processing.exchange]
-    PQ[video.processing]
-    PRX[video.processing.retry.exchange]
-    PRQ[video.processing.retry]
-    PDLX[video.processing.dlx]
-    PDLQ[video.processing.dlq]
-    WORKER[Processing Worker]
+    classDef api fill:#512BD4,color:#fff,stroke:#39208A
+    classDef worker fill:#1F7A5A,color:#fff,stroke:#0F4A35
+    classDef broker fill:#FF6600,color:#fff,stroke:#B34700
+    classDef store fill:#2563EB,color:#fff,stroke:#1E3A8A
+    classDef dlq fill:#3F3F46,color:#fff,stroke:#18181B
+    classDef retry fill:#FFF8E1,color:#2F2500,stroke:#A06A00
 
-    EVX[video.events]
-    SQ[video.status-updates]
-    SRX[video.status.retry.exchange]
-    SRQ[video.status-updates.retry]
-    SDLX[video.status.dlx]
-    SDLQ[video.status-updates.dlq]
-    API[Management API]
+    MINIO["MinIO<br/>ObjectCreated"]:::store
+    PX["video.processing.exchange"]:::broker
+    PQ["video.processing"]:::broker
+    PRX["video.processing.retry.exchange"]:::retry
+    PRQ["video.processing.retry"]:::retry
+    PDLX["video.processing.dlx"]:::dlq
+    PDLQ["video.processing.dlq"]:::dlq
+    WORKER["Processing Worker"]:::worker
+
+    EVX["video.events"]:::broker
+    SQ["video.status-updates"]:::broker
+    SRX["video.status.retry.exchange"]:::retry
+    SRQ["video.status-updates.retry"]:::retry
+    SDLX["video.status.dlx"]:::dlq
+    SDLQ["video.status-updates.dlq"]:::dlq
+    API["Management API"]:::api
 
     MINIO -->|video.uploaded| PX
     PX --> PQ

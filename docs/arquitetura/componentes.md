@@ -3,34 +3,44 @@
 ## Visão de componentes
 
 ```mermaid
+%%{init: {"flowchart": {"nodeSpacing": 30, "rankSpacing": 44}} }%%
 flowchart TB
+    classDef api fill:#512BD4,color:#fff,stroke:#39208A
+    classDef worker fill:#1F7A5A,color:#fff,stroke:#0F4A35
+    classDef broker fill:#FF6600,color:#fff,stroke:#B34700
+    classDef store fill:#2563EB,color:#fff,stroke:#1E3A8A
+    classDef auth fill:#6D28D9,color:#fff,stroke:#4C1D95
+    classDef mail fill:#3F3F46,color:#fff,stroke:#18181B
+    classDef adapter fill:#F4F7FB,color:#1F2933,stroke:#627282
+    classDef tool fill:#FFF8E1,color:#2F2500,stroke:#A06A00
+
     subgraph API["fiapx-video-management"]
-      API_HTTP[Minimal API ASP.NET Core]
-      AUTH[JWT Bearer]
-      VIDEO_SERVICE[ServicoVideo]
-      STATUS_CONSUMER[ConsumidorStatusRabbitMq]
-      STORAGE_ADAPTER[ArmazenamentoVideoS3]
-      CACHE_ADAPTER[CacheVideoRedis]
-      SMTP_ADAPTER[EnviadorNotificacaoSmtp]
-      REPO[RepositorioVideoEf]
+      API_HTTP["Minimal API<br/>ASP.NET Core"]:::api
+      AUTH["JWT Bearer"]:::auth
+      VIDEO_SERVICE[ServicoVideo]:::api
+      STATUS_CONSUMER["ConsumidorStatus<br/>RabbitMQ"]:::broker
+      STORAGE_ADAPTER[ArmazenamentoVideoS3]:::adapter
+      CACHE_ADAPTER[CacheVideoRedis]:::adapter
+      SMTP_ADAPTER[EnviadorNotificacaoSmtp]:::adapter
+      REPO[RepositorioVideoEf]:::adapter
     end
 
     subgraph WORKER["fiapx-video-processing"]
-      BG[BackgroundService Worker]
-      PARSER[ParserObjetoCriadoMinio]
-      PROCESS_SERVICE[ServicoProcessamentoVideo]
-      FFMPEG[ExtratorQuadrosFfmpeg]
-      ZIP[EmpacotadorResultadoZip]
-      MINIO_ADAPTER[ArmazenamentoVideoMinio]
-      PUBLISHER[ConfirmedRabbitMqPublisher]
+      BG["BackgroundService<br/>Worker"]:::worker
+      PARSER[ParserObjetoCriadoMinio]:::adapter
+      PROCESS_SERVICE[ServicoProcessamentoVideo]:::worker
+      FFMPEG[ExtratorQuadrosFfmpeg]:::tool
+      ZIP[EmpacotadorResultadoZip]:::tool
+      MINIO_ADAPTER[ArmazenamentoVideoMinio]:::adapter
+      PUBLISHER[ConfirmedRabbitMqPublisher]:::broker
     end
 
-    KC[Keycloak]
-    PG[(PostgreSQL)]
-    REDIS[(Redis)]
-    MINIO[(MinIO)]
-    MQ[RabbitMQ]
-    MAIL[Mailpit]
+    KC["Keycloak<br/>realm fiapx"]:::auth
+    PG[("PostgreSQL<br/>videos")]:::store
+    REDIS[("Redis<br/>cache")]:::store
+    MINIO[("MinIO<br/>bucket videos")]:::store
+    MQ["RabbitMQ<br/>topologia"]:::broker
+    MAIL["Mailpit<br/>SMTP local"]:::mail
 
     AUTH --> KC
     API_HTTP --> VIDEO_SERVICE

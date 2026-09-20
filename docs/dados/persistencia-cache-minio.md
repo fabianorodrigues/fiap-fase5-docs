@@ -3,12 +3,17 @@
 ## Visão de dados
 
 ```mermaid
+%%{init: {"flowchart": {"nodeSpacing": 34, "rankSpacing": 46}} }%%
 flowchart LR
-    API[Management API]
-    PG[(PostgreSQL videos)]
-    REDIS[(Redis)]
-    MINIO[(MinIO bucket videos)]
-    WORKER[Processing Worker]
+    classDef api fill:#512BD4,color:#fff,stroke:#39208A
+    classDef worker fill:#1F7A5A,color:#fff,stroke:#0F4A35
+    classDef store fill:#2563EB,color:#fff,stroke:#1E3A8A
+
+    API["Management API<br/>HTTP"]:::api
+    PG[("PostgreSQL<br/>videos")]:::store
+    REDIS[("Redis<br/>cache")]:::store
+    MINIO[("MinIO<br/>bucket videos")]:::store
+    WORKER["Processing Worker<br/>.NET"]:::worker
 
     API -->|INSERT/UPDATE/SELECT| PG
     API -. "video:{userId}:{videoId}" .-> REDIS
