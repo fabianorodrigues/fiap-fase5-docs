@@ -1,0 +1,30 @@
+# Build MkDocs
+site/
+
+# Caches
+.cache/
+.mkdocs_cache/
+.pytest_cache/
+__pycache__/
+*.py[cod]
+
+# Ambiente Python local
+.venv/
+venv/
+env/
+
+# Arquivos locais
+.env
+.env.*
+!.env.example
+
+# IDEs e sistema operacional
+.vs/
+.vscode/
+.idea/
+*.suo
+*.user
+*.tmp
+*.log
+Thumbs.db
+.DS_Store

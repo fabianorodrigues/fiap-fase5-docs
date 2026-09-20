@@ -1,0 +1,351 @@
+/* FIAP X - ajustes visuais do site de arquitetura. */
+
+:root {
+  --fiapx-accent: #00897b;
+  --fiapx-accent-soft: rgba(0, 137, 123, 0.1);
+  --fiapx-surface: #ffffff;
+  --fiapx-surface-muted: #f5f7fa;
+  --fiapx-border: #dde4ec;
+  --fiapx-border-strong: #c3cedb;
+  --fiapx-text-muted: #4e5c6b;
+  --fiapx-radius: 0.4rem;
+}
+
+[data-md-color-scheme="slate"] {
+  --fiapx-accent: #64d8cb;
+  --fiapx-accent-soft: rgba(100, 216, 203, 0.12);
+  --fiapx-surface: #1c242e;
+  --fiapx-surface-muted: #171e27;
+  --fiapx-border: #2f3b47;
+  --fiapx-border-strong: #3e4c5a;
+  --fiapx-text-muted: #b0bcc8;
+}
+
+[data-md-color-accent="teal"] {
+  --md-accent-fg-color: var(--fiapx-accent);
+}
+
+.md-grid {
+  max-width: 72rem;
+}
+
+.md-typeset {
+  font-size: 0.8rem;
+}
+
+.md-typeset p,
+.md-typeset li {
+  line-height: 1.72;
+}
+
+.md-header {
+  box-shadow: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.md-tabs {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.md-typeset h1 {
+  margin-bottom: 0.6rem;
+  color: var(--md-default-fg-color);
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+.md-typeset h2 {
+  margin-top: 2.4rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--fiapx-border);
+  font-weight: 650;
+  letter-spacing: 0;
+}
+
+.md-typeset h3 {
+  margin-top: 1.7rem;
+  font-weight: 650;
+  letter-spacing: 0;
+}
+
+.md-typeset table:not([class]) {
+  border: 1px solid var(--fiapx-border);
+  border-radius: var(--fiapx-radius);
+  font-size: 0.72rem;
+}
+
+.md-typeset table:not([class]) th {
+  border-bottom: 1px solid var(--fiapx-border-strong);
+  background: var(--fiapx-surface-muted);
+  color: var(--md-default-fg-color);
+  font-weight: 700;
+}
+
+.md-typeset table:not([class]) td,
+.md-typeset table:not([class]) th {
+  padding: 0.55rem 0.8rem;
+  vertical-align: top;
+}
+
+.md-typeset table:not([class]) td:first-child {
+  color: var(--md-default-fg-color);
+  font-weight: 600;
+}
+
+.md-typeset pre > code {
+  border: 1px solid var(--fiapx-border);
+  border-radius: var(--fiapx-radius);
+}
+
+.md-typeset .admonition,
+.md-typeset details {
+  border-width: 1px;
+  border-left-width: 3px;
+  border-radius: var(--fiapx-radius);
+  box-shadow: none;
+  font-size: 0.74rem;
+}
+
+.fiapx-hero {
+  margin: 0 0 1.6rem;
+  padding-bottom: 1.4rem;
+  border-bottom: 1px solid var(--fiapx-border);
+}
+
+.fiapx-hero h1 .headerlink {
+  display: none;
+}
+
+.md-typeset .fiapx-eyebrow {
+  margin: 0 0 0.45rem;
+  color: var(--fiapx-accent);
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.md-typeset .fiapx-lead {
+  max-width: 46rem;
+  margin: 0;
+  color: var(--fiapx-text-muted);
+  font-size: 0.88rem;
+  line-height: 1.62;
+}
+
+.fiapx-pill-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 1.1rem;
+}
+
+.fiapx-pill-row span {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.15rem 0.5rem;
+  border: 1px solid var(--fiapx-border);
+  border-radius: 999px;
+  background: var(--fiapx-accent-soft);
+  color: var(--md-default-fg-color);
+  font-size: 0.64rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.fiapx-summary,
+.fiapx-nav-grid,
+.fiapx-component-grid {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.fiapx-summary {
+  grid-template-columns: minmax(0, 1.5fr) minmax(14rem, 0.7fr);
+  align-items: start;
+  margin: 1.6rem 0;
+}
+
+.fiapx-nav-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 1.2rem 0 1.6rem;
+}
+
+.fiapx-component-grid {
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  margin: 1.2rem 0 1.6rem;
+}
+
+.fiapx-panel,
+.fiapx-card,
+.fiapx-component-card {
+  border: 1px solid var(--fiapx-border);
+  border-radius: var(--fiapx-radius);
+  background: var(--fiapx-surface);
+}
+
+.fiapx-panel {
+  height: 100%;
+  padding: 1.1rem 1.2rem;
+}
+
+.md-typeset a.fiapx-card {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.9rem;
+  padding: 1rem 1.1rem;
+  color: var(--md-default-fg-color);
+  text-decoration: none;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.md-typeset a.fiapx-card:hover,
+.md-typeset a.fiapx-card:focus-visible {
+  border-color: var(--fiapx-accent);
+  background: var(--fiapx-surface-muted);
+}
+
+.fiapx-component-card {
+  padding: 0.9rem 1rem;
+}
+
+.md-typeset .fiapx-panel h2,
+.md-typeset .fiapx-card h3,
+.md-typeset .fiapx-component-card h3 {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: 0;
+  font-size: 0.84rem;
+}
+
+.md-typeset .fiapx-card p,
+.md-typeset .fiapx-component-card p {
+  margin: 0;
+  color: var(--fiapx-text-muted);
+  font-size: 0.72rem;
+  line-height: 1.55;
+}
+
+.fiapx-card__action {
+  color: var(--fiapx-accent);
+  font-size: 0.68rem;
+  font-weight: 700;
+}
+
+.fiapx-card__action::after {
+  content: " ->";
+}
+
+.md-typeset .fiapx-repos td:first-child code {
+  white-space: nowrap;
+}
+
+.md-typeset .fiapx-diagram {
+  display: flex;
+  flex-direction: column;
+  margin: 1.6rem 0;
+  overflow: hidden;
+  border: 1px solid var(--fiapx-border);
+  border-radius: var(--fiapx-radius);
+  background: var(--fiapx-surface-muted);
+}
+
+.fiapx-diagram__stage {
+  padding: 1.1rem;
+  overflow: auto;
+}
+
+.md-typeset .fiapx-diagram .mermaid {
+  display: block;
+  margin: 0 auto;
+  padding: 0;
+  border: 0;
+  background: none;
+}
+
+.fiapx-diagram__bar {
+  display: flex;
+  gap: 0.4rem 0.8rem;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.4rem 0.55rem 0.4rem 0.9rem;
+  border-top: 1px solid var(--fiapx-border);
+  background: var(--fiapx-surface);
+}
+
+.fiapx-diagram__hint {
+  margin: 0;
+  color: var(--fiapx-text-muted);
+  font-size: 0.62rem;
+}
+
+.fiapx-diagram__actions {
+  display: flex;
+  gap: 0.15rem;
+  margin-left: auto;
+}
+
+.fiapx-diagram__button {
+  width: 1.6rem;
+  height: 1.6rem;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 0.25rem;
+  background: none;
+  color: var(--fiapx-text-muted);
+  cursor: pointer;
+}
+
+.fiapx-diagram__button:hover {
+  border-color: var(--fiapx-border-strong);
+  background: var(--fiapx-surface-muted);
+  color: var(--md-default-fg-color);
+}
+
+.fiapx-diagram.is-fullscreen {
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+}
+
+.fiapx-diagram.is-fullscreen .fiapx-diagram__stage {
+  height: calc(100vh - 2.5rem);
+}
+
+@media screen and (max-width: 59.9844em) {
+  .fiapx-nav-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media screen and (max-width: 44.9844em) {
+  .md-typeset {
+    font-size: 0.78rem;
+  }
+
+  .fiapx-summary,
+  .fiapx-nav-grid,
+  .fiapx-component-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .md-typeset .fiapx-lead {
+    font-size: 0.82rem;
+  }
+
+  .fiapx-diagram__stage {
+    padding: 0.7rem;
+  }
+
+  .fiapx-diagram__hint {
+    display: none;
+  }
+}
+
+@media print {
+  .fiapx-diagram__bar {
+    display: none;
+  }
+}
